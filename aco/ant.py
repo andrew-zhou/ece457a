@@ -40,8 +40,8 @@ class Ant(threading.Thread):
             if neighbour in self.route:
                 continue
             # TODO: Implement this stuff
-            pheromones = self.location.pheromones_to(neighbour)
-            desirability = 1.0 / self.location.cost_to(neighbour)
+            pheromones = self.location.pheromones_to(neighbour.id)
+            desirability = 1.0 / self.location.cost_to(neighbour.id)
             attractiveness[neighbour.id] = (pheromones ** acoconstants.ALPHA) * (cost ** acoconstants.BETA)
             attr_total += attractiveness[neighbour.id]
             considered.append(neighbour)
@@ -67,7 +67,7 @@ class Ant(threading.Thread):
 
     def _traverse(self, next_):
         # TODO: Implement this in node
-        self.cost += self.location.cost_to(next_)
+        self.cost += self.location.cost_to(next_.id)
         self.route.append(next_)
         self.location = next_
 
