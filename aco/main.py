@@ -5,11 +5,11 @@ from acoconstants import NUM_NODES, MIN_DIST, MAX_DIST, MAX_NEIGHBOURS, NUM_DRON
 import random
 
 def build_graph():
-	nodes = {id_: ACONode(id_, False) for id_ in range(NUM_NODES)}
+	nodes = {id_: ACONode(id_, False) for id_ in range(1, NUM_NODES + 1)}
 	for node in nodes.values():
 		num_neighbours = random.randint(1, MAX_NEIGHBOURS)
 		for _ in range(num_neighbours):
-			id_ = random.randint(0, NUM_NODES - 1)
+			id_ = random.randint(1, NUM_NODES)
 			if id_ == node.id:
 				continue
 			neighbour = nodes[id_]
@@ -43,7 +43,7 @@ if __name__ == '__main__':
 	graph = build_graph()
 	for drone in range(NUM_DRONES):
 		print('Finding path for drone {}'.format(drone))
-		goal = random.randint(0, NUM_NODES - 1)
+		goal = random.randint(1, NUM_NODES)
 		graph[goal]._goal = True
 		print('Goal for drone {} is {}'.format(drone, goal))
 
