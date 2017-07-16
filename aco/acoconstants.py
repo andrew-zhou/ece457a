@@ -1,5 +1,17 @@
 #!/bin/python3
 
 # Tuning Parameters
-ALPHA = 1.0
-BETA = 1.0
+ALPHA = 0.5
+BETA = 0.5
+
+# Colony Parameters
+NUM_ANTS = 8
+NUM_ITERATIONS = 10000
+UPDATE_CONST = 1000.0
+EVAPORATION_CONST = 0.5
+
+# Graph Parameters
+NUM_NODES = 100
+MIN_DIST = 1
+MAX_DIST = 10
+MAX_NEIGHBOURS = 5

@@ -11,14 +11,13 @@ class Ant(threading.Thread):
 
         start: Starting node in graph
         """
+        super(Ant, self).__init__()
         self.location = start
-        self.route = []
+        self.route = [start]
         self.cost = 0.0
-        # TODO: Might want to track completion status to one of: goal, no more moves, max iterations
         self.complete = False
 
     def run(self):
-        # TODO: We may want an optional max number of iterations
         while True:
             next_ = self._pick_next()
             # Finish if no more possible steps
@@ -34,15 +33,13 @@ class Ant(threading.Thread):
         attractiveness = {}
         attr_total = 0.0
         considered = []
-        # TODO: Implement this in nodes
-        for neighbour in self.location.neighbours:
+        for neighbour in self.location.neighbours.values():
             # Ignore if already visited
             if neighbour in self.route:
                 continue
-            # TODO: Implement this stuff
             pheromones = self.location.pheromones_to(neighbour.id)
             desirability = 1.0 / self.location.cost_to(neighbour.id)
-            attractiveness[neighbour.id] = (pheromones ** acoconstants.ALPHA) * (cost ** acoconstants.BETA)
+            attractiveness[neighbour.id] = (pheromones ** acoconstants.ALPHA) * (desirability ** acoconstants.BETA)
             attr_total += attractiveness[neighbour.id]
             considered.append(neighbour)
 
@@ -66,15 +63,14 @@ class Ant(threading.Thread):
         raise Exception('Something in the code broke if we reached this point')
 
     def _traverse(self, next_):
-        # TODO: Implement this in node
         self.cost += self.location.cost_to(next_.id)
         self.route.append(next_)
         self.location = next_
 
     def get_route(self):
-    """Public accessor for route. Returns None if not complete."""
-    return self.route if self.complete else None
+        """Public accessor for route. Returns None if not complete."""
+        return self.route if self.complete else None
 
     def get_cost(self):
-    """Public accessor for cost. Returns None if not complete."""
-    return self.cost if self.complete else None
+        """Public accessor for cost. Returns None if not complete."""
+        return self.cost if self.complete else None
