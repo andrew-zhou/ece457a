@@ -1,6 +1,6 @@
 from acocolony import ACOColony
 from aconode import ACONode
-from acoconstants import NUM_NODES, MIN_DIST, MAX_DIST, MAX_NEIGHBOURS
+from acoconstants import NUM_NODES, MIN_DIST, MAX_DIST, MAX_NEIGHBOURS, NUM_DRONES
 
 import random
 
@@ -20,78 +20,45 @@ def build_graph():
 			distance = random.random() + random.randint(MIN_DIST, MAX_DIST - 1)
 			node.distances[id_] = distance
 			neighbour.distances[node.id] = distance
-	goal = random.randint(0, NUM_NODES - 1)
-	print('GOAL: {}'.format(goal))
-	nodes[goal]._goal = True
 	return nodes
 
-graph = {
-	0: ACONode(0, False),
-	1: ACONode(1, False),
-	2: ACONode(2, False),
-	3: ACONode(3, True),
-}
+def strip_path_from_graph(graph, path):
+	for i in range(len(path) - 1):
+		n = path[i].id
+		next_ = path[i + 1].id
+		del graph[n].neighbours[next_]
+		del graph[n].distances[next_]
+		del graph[n].pheromones[next_]
+		del graph[next_].neighbours[n]
+		del graph[next_].distances[n]
+		del graph[next_].pheromones[n]
 
-graph[0].neighbours = {
-	1: graph[1],
-	3: graph[3],
-}
-graph[0].distances = {
-	1: 2,
-	3: 5,
-}
-graph[0].pheromones = {
-	1: 0.0,
-	3: 0.0
-}
-graph[1].neighbours = {
-	1: graph[1],
-	2: graph[2],
-}
-graph[1].distances = {
-	1: 2,
-	2: 2,
-}
-graph[1].pheromones = {
-	1: 0.0,
-	2: 0.0
-}
-graph[2].neighbours = {
-	1: graph[1],
-	3: graph[3],
-}
-graph[2].distances = {
-	1: 2,
-	3: 2,
-}
-graph[2].pheromones = {
-	1: 0.0,
-	3: 0.0
-}
-graph[3].neighbours = {
-	0: graph[0],
-	2: graph[2],
-}
-graph[3].distances = {
-	0: 5,
-	2: 2,
-}
-graph[3].pheromones = {
-	0: 0.0,
-	2: 0.0
-}
+def reset_graph(graph):
+	for node in graph.values():
+		for id_ in node.pheromones:
+			node.pheromones[id_] = 0.0
+		node._goal = False
 
 if __name__ == '__main__':
-	# graph = build_graph()
-	colony = ACOColony(graph, 0)
-	colony.search()
-	print('Best Path:')
-	route = colony.best_path
-	dist_so_far = 0.0
-	for i in range(len(route) - 1):
-		n = route[i]
-		print('Node: {}'.format(n.id))
-		print('Distance so far: {}'.format(dist_so_far))
-		print('Distance to next node: {}'.format(n.cost_to(route[i+1].id)))
-		dist_so_far += n.cost_to(route[i+1].id)
-	print('Best Cost: {}'.format(colony.best_cost))
+	graph = build_graph()
+	for drone in range(NUM_DRONES):
+		print('Finding path for drone {}'.format(drone))
+		goal = random.randint(0, NUM_NODES - 1)
+		graph[goal]._goal = True
+		print('Goal for drone {} is {}'.format(drone, goal))
+
+		colony = ACOColony(graph, 0)
+		colony.search()
+		print('Best Path:')
+		route = colony.best_path
+		dist_so_far = 0.0
+		for i in range(len(route) - 1):
+			n = route[i]
+			print('Node: {}'.format(n.id))
+			print('Distance so far: {}'.format(dist_so_far))
+			print('Distance to next node: {}'.format(n.cost_to(route[i+1].id)))
+			dist_so_far += n.cost_to(route[i+1].id)
+		print('Best Cost: {}'.format(colony.best_cost))
+
+		strip_path_from_graph(graph, route)
+		reset_graph(graph)
