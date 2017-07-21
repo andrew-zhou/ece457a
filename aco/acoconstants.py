@@ -17,4 +17,7 @@ MAX_DIST = 10
 MAX_NEIGHBOURS = 2
 
 # Meta Parameters
-NUM_DRONES = 5
+NUM_CHROMOSOMES = 10  # This should always be even
+NUM_GENERATIONS = 5
+MUTATE_RATE = 0.1
+CROSSOVER_RATE = 0.7

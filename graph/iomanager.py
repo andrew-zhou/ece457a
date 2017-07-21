@@ -2,14 +2,21 @@
 
 import math
 
+class GraphNode(object):
+    def __init__(self, id_):
+        self.id = id_
+        self.neighbours = {}
+        self.distances = {}
+
+    def cost_to(self, id):
+        return self.distances.get(id, math.inf)
+
 class IOManager(object):
     """IOManager handles converting between dictionaries of GraphNode objects and
     .ecegraph files.
-
-
     """
     @classmethod
-    def import_graph(cls, filename):
+    def import_graph(cls, filename, node_cls=GraphNode):
         """Returns a dictionary of GraphNode objects.
 
         Parameters:
@@ -27,7 +34,7 @@ class IOManager(object):
             for line in file:
                 if num_nodes is None:
                     num_nodes = int(line)
-                    graph = {id_: GraphNode(id_) for id_ in range(1, num_nodes + 1)}
+                    graph = {id_: node_cls(id_) for id_ in range(1, num_nodes + 1)}
                 else:
                     m, n, dist = line.split(' ')
                     m = int(m)
@@ -61,13 +68,3 @@ class IOManager(object):
 
         with open(filename, 'w') as file:
             file.write(file_string)
-
-
-class GraphNode(object):
-    def __init__(self, id_):
-        self.id = id_
-        self.neighbours = {}
-        self.distances = {}
-
-    def cost_to(self, id):
-        return self.distances.get(id, math.inf)

@@ -3,12 +3,12 @@
 import math
 
 class ACONode(object):
-    def __init__(self, id_, goal):
+    def __init__(self, id_):
         self.id = id_
         self.neighbours = {}
         self.distances = {}
         self.pheromones = {}
-        self._goal = goal
+        self._goal = False
 
     def pheromones_to(self, id):
         return self.pheromones.get(id, 0)

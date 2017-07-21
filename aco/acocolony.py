@@ -1,5 +1,5 @@
-from ant import Ant
-from acoconstants import NUM_ANTS, NUM_ITERATIONS, UPDATE_CONST, EVAPORATION_CONST
+from aco.ant import Ant
+from aco.acoconstants import NUM_ANTS, NUM_ITERATIONS, UPDATE_CONST, EVAPORATION_CONST
 import math
 
 class ACOColony(object):

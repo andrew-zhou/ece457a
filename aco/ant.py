@@ -1,9 +1,10 @@
 #!/bin/python3
 
+import math
 import threading
 import random
 
-import acoconstants
+import aco.acoconstants as acoconstants
 
 class Ant(threading.Thread):
     def __init__(self, start):
@@ -19,14 +20,15 @@ class Ant(threading.Thread):
 
     def run(self):
         while True:
+            # Finish if we have reached a goal
+            if self.location.is_goal():
+                break
             next_ = self._pick_next()
             # Finish if no more possible steps
             if not next_:
                 break
             self._traverse(next_)
-            # Finish if we have reached a goal
-            if self.location.is_goal():
-                break
+            
         self.complete = True
 
     def _pick_next(self):
@@ -73,4 +75,8 @@ class Ant(threading.Thread):
 
     def get_cost(self):
         """Public accessor for cost. Returns None if not complete."""
-        return self.cost if self.complete else None
+        if not self.complete:
+            return None
+        if not self.route[-1].is_goal():
+            return math.inf
+        return self.cost
