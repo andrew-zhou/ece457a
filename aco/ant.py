@@ -7,7 +7,7 @@ import random
 import aco.acoconstants as acoconstants
 
 class Ant(threading.Thread):
-    def __init__(self, start):
+    def __init__(self, start, pheromone_map, forbidden_moves, goal):
         """Initializes an ant to traverse from start to a goal node.
 
         start: Starting node in graph
@@ -17,29 +17,34 @@ class Ant(threading.Thread):
         self.route = [start]
         self.cost = 0.0
         self.complete = False
+        self.pheromone_map = pheromone_map
+        self.forbidden_moves = forbidden_moves
+        self.goal = goal
 
     def run(self):
         while True:
             # Finish if we have reached a goal
-            if self.location.is_goal():
+            if self.location.id == self.goal:
                 break
             next_ = self._pick_next()
             # Finish if no more possible steps
             if not next_:
                 break
             self._traverse(next_)
-            
         self.complete = True
 
     def _pick_next(self):
         attractiveness = {}
         attr_total = 0.0
         considered = []
-        for neighbour in self.location.neighbours.values():
+        for n_id, neighbour in self.location.neighbours.items():
             # Ignore if already visited
             if neighbour in self.route:
                 continue
-            pheromones = self.location.pheromones_to(neighbour.id)
+            # Ignore if forbidden move
+            if self._is_forbidden(n_id):
+                continue
+            pheromones = self.pheromone_map.get((self.location.id, n_id), 0.0)
             desirability = 1.0 / self.location.cost_to(neighbour.id)
             attractiveness[neighbour.id] = (pheromones ** acoconstants.ALPHA) * (desirability ** acoconstants.BETA)
             attr_total += attractiveness[neighbour.id]
@@ -77,6 +82,11 @@ class Ant(threading.Thread):
         """Public accessor for cost. Returns None if not complete."""
         if not self.complete:
             return None
-        if not self.route[-1].is_goal():
+        if not self.route[-1].id == self.goal:
             return math.inf
         return self.cost
+
+    def _is_forbidden(self, move):
+        if (self.location.id, move) in self.forbidden_moves or (move, self.location.id) in self.forbidden_moves:
+            return True
+        return False

@@ -15,6 +15,7 @@ NUM_NODES = 10
 MIN_DIST = 1
 MAX_DIST = 10
 MAX_NEIGHBOURS = 2
+START_NODE = 1
 
 # Meta Parameters
 NUM_CHROMOSOMES = 10  # This should always be even

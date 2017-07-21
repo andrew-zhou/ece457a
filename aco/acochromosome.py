@@ -7,18 +7,17 @@ class ACOChromosome(object):
 		self.goals = goals
 		self.complete = False
 		self.solutions = None
+		self.used_edges = set()
 
 	def solve(self):
 		self.solutions = []
 		for goal in self.goals:
-			self.graph[goal]._goal = True
-			colony = ACOColony(self.graph, 1)
+			colony = ACOColony(self.graph, self.used_edges, goal)
 			colony.search()
 			route = colony.best_path
 			if route:
 				self.solutions.append(([n.id for n in route], colony.best_cost))
-				self._strip_path_from_graph(route)
-			self._reset_graph()
+				self._add_forbidden_moves(route)
 		self.complete = True
 		return self.solutions
 
@@ -69,19 +68,7 @@ class ACOChromosome(object):
 	def get_solutions(self):
 		return self.solutions if self.complete else None
 
-	def _strip_path_from_graph(self, path):
-		for i in range(len(path) - 1):
-			n = path[i].id
-			next_ = path[i + 1].id
-			del self.graph[n].neighbours[next_]
-			del self.graph[n].distances[next_]
-			del self.graph[n].pheromones[next_]
-			del self.graph[next_].neighbours[n]
-			del self.graph[next_].distances[n]
-			del self.graph[next_].pheromones[n]
-
-	def _reset_graph(self):
-		for node in self.graph.values():
-			for id_ in node.pheromones:
-				node.pheromones[id_] = 0.0
-			node._goal = False
+	def _add_forbidden_moves(self, route):
+		for idx in range(len(route) - 1):
+			edge = (route[idx].id, route[idx + 1].id)
+			self.used_edges.add(edge)

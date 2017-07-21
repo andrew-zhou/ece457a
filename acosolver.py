@@ -17,29 +17,14 @@ class ACOSolver(object):
 		self._setup_chromosomes()
 
 	def _setup_graph(self, fname):
-		base_graph = IOManager.import_graph(fname, ACONode)
-		for node in base_graph.values():
-			node.pheromones = {n: 0 for n in node.neighbours.keys()}
-		self.graph = base_graph
+		self.graph = IOManager.import_graph(fname, ACONode)
 
 	def _setup_chromosomes(self):
 		self.chromosomes = []
 		for _ in range(NUM_CHROMOSOMES):
 			order = copy.copy(self.goals)
 			random.shuffle(order)
-			g = self._copy_graph(self.graph)
-			self.chromosomes.append(ACOChromosome(g, order))
-
-	@classmethod
-	def _copy_graph(cls, graph):
-		new_graph = {id_: ACONode(id_) for id_ in range(1, max(graph.keys()) + 1)}
-		for id_, node in graph.items():
-			aco_node = new_graph[id_]
-			for n_id, n_dist in node.distances.items():
-				aco_node.neighbours[n_id] = new_graph[n_id]
-				aco_node.distances[n_id] = n_dist
-				aco_node.pheromones[n_id] = 0
-		return new_graph
+			self.chromosomes.append(ACOChromosome(self.graph, order))
 
 	def solve(self):
 		best_score, best_soln, best_order = None, None, None
@@ -77,13 +62,13 @@ class ACOSolver(object):
 				if random.random() < CROSSOVER_RATE:
 					goals1, goals2 = ACOChromosome.crossover(c1, c2)
 				# Add to new generation
-				child1 = ACOChromosome(self._copy_graph(self.graph), goals1)
-				child2 = ACOChromosome(self._copy_graph(self.graph), goals2)
+				child1 = ACOChromosome(self.graph, goals1)
+				child2 = ACOChromosome(self.graph, goals2)
 				new_gen.append(child1)
 				new_gen.append(child2)
 			# Elitism model - keep best solution so far in population
 			if best_order:
-				best = ACOChromosome(copy.deepcopy(self.graph), best_order)
+				best = ACOChromosome(self.graph, best_order)
 				new_gen[-1] = best
 			self.chromosomes = new_gen
 		return (best_score, best_soln, best_order)
