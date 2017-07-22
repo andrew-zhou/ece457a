@@ -29,7 +29,7 @@
 \IEEEauthorblockA{\textit{fkmansou@uwaterloo.ca}}
 \and
 \IEEEauthorblockN{Andrew Zhou}
-\IEEEauthorblockA{\textit{fkmansou@uwaterloo.ca}}
+\IEEEauthorblockA{\textit{a25zhou@edu.uwaterloo.ca}}
 }
 
 \maketitle
@@ -49,8 +49,15 @@ ant colony optimization, genetic algorithms, path planning, network theory (grap
 \blindtext
 
 \section{Literature Review}
-% TODO: Andrew
-\blindtext
+Previous research in the field of three dimensional path planning has focused on the single-agent problem and has traditionally looked at genetic algorithm (GA) and particle swarm optimization (PSO) approaches. Studies in this field have motivated the techniques utilised in this paper both through the algorithms for single-drone path finding as well as the reduction of a real three-dimensional space into a graph of waypoints.
+
+A key optimization conducted in this paper is the reduction of real three-dimensional spaces into adjacency lists of waypoints. Doing this minimizes the search space drastically, enabling the path planning techniques to be more effective on a wider range of potential spaces. This reduction is done by grouping neighbouring points into waypoints and then calculating an average real-world cost to move between neighbouring waypoints. Studies on real-time UAV path planning suggest that the cost for a drone to move between points is determined by distance, altitude, power consumption, fuel usage, ground collisions, and whether or not the drone must traverse through danger zones \cite{b1}. To translate this from points to waypoints, this paper treats the position of the waypoint as the center point within the space that it occupies. Then the resulting cost function is:
+$$F_{cost} = C_{length} + C_{altitude} + C_{danger zones}$$
+$$ + C_{power} + C_{collision} + C_{fuel}$$
+
+Prior studies have thus far been inconclusive in determining whether GA techniques are superior to PSO techniques for the single-drone problem \cite{b2} or vice-versa \cite{b3}. Additionally, the addition of multiple simultaneous drones adds a major consideration which these techniques do not take into account. This lack of conclusiveness prevented this paper's techniques from being fully rooted in the traditional methods discussed in the literature. Nevertheless, those approaches are taken into account.
+
+The multi-drone path planning techniques discussed in this paper break down the problem into a series of single-drone path planning subproblems. These subproblems are solved using a combination of techniques similar to the literature (GA-based) as well as more novel approaches through ant colony optimization (ACO) methods. The methods for reducing the multi-drone problem are themselves unique and not considered in prior literature.
 
 \section{Problem Formulation and Modeling}
 % TODO: Jake
@@ -70,33 +77,10 @@ ant colony optimization, genetic algorithms, path planning, network theory (grap
 
 \section*{References}
 
-Please number citations consecutively within brackets \cite{b1}. The 
-sentence punctuation follows the bracket \cite{b2}. Refer simply to the reference 
-number, as in \cite{b3}---do not use ``Ref. \cite{b3}'' or ``reference \cite{b3}'' except at 
-the beginning of a sentence: ``Reference \cite{b3} was the first $\ldots$''
-
-Number footnotes separately in superscripts. Place the actual footnote at 
-the bottom of the column in which it was cited. Do not put footnotes in the 
-abstract or reference list. Use letters for table footnotes.
-
-Unless there are six authors or more give all authors' names; do not use 
-``et al.''. Papers that have not been published, even if they have been 
-submitted for publication, should be cited as ``unpublished'' \cite{b4}. Papers 
-that have been accepted for publication should be cited as ``in press'' \cite{b5}. 
-Capitalize only the first word in a paper title, except for proper nouns and 
-element symbols.
-
-For papers published in translation journals, please give the English 
-citation first, followed by the original foreign-language citation \cite{b6}.
-
 \begin{thebibliography}{00}
-\bibitem{b1} G. Eason, B. Noble, and I. N. Sneddon, ``On certain integrals of Lipschitz-Hankel type involving products of Bessel functions,'' Phil. Trans. Roy. Soc. London, vol. A247, pp. 529--551, April 1955.
-\bibitem{b2} J. Clerk Maxwell, A Treatise on Electricity and Magnetism, 3rd ed., vol. 2. Oxford: Clarendon, 1892, pp.68--73.
-\bibitem{b3} I. S. Jacobs and C. P. Bean, ``Fine particles, thin films and exchange anisotropy,'' in Magnetism, vol. III, G. T. Rado and H. Suhl, Eds. New York: Academic, 1963, pp. 271--350.
-\bibitem{b4} K. Elissa, ``Title of paper if known,'' unpublished.
-\bibitem{b5} R. Nicole, ``Title of paper with only first word capitalized,'' J. Name Stand. Abbrev., in press.
-\bibitem{b6} Y. Yorozu, M. Hirano, K. Oka, and Y. Tagawa, ``Electron spectroscopy studies on magneto-optical media and plastic substrate interface,'' IEEE Transl. J. Magn. Japan, vol. 2, pp. 740--741, August 1987 [Digests 9th Annual Conf. Magnetics Japan, p. 301, 1982].
-\bibitem{b7} M. Young, The Technical Writer's Handbook. Mill Valley, CA: University Science, 1989.
+\bibitem{b1} Roberge, Vincent, Mohammed Tarbouchi, and Gilles Labont. "Comparison of parallel genetic algorithm and particle swarm optimization for real-time UAV path planning." IEEE Transactions on Industrial Informatics 9.1 (2013): 132-141
+\bibitem{b2} Tu, Jianping, and Simon X. Yang. "Genetic algorithm based path planning for a mobile robot." Robotics and Automation, 2003. Proceedings. ICRA'03. IEEE International Conference on. Vol. 1. IEEE, 2003
+\bibitem{b3} Masehian, Ellips, and DavoudSedighizadeh. "A multi-objective PSO-based algorithm for robot path planning." Industrial Technology (ICIT), 2010 IEEE International Conference on. IEEE, 2010
 \end{thebibliography}
 
 \end{document}
