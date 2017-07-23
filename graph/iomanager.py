@@ -9,7 +9,7 @@ class GraphNode(object):
         self.distances = {}
 
     def cost_to(self, id):
-        return self.distances.get(id, math.inf)
+        return self.distances.get(id, float('inf'))
 
 class IOManager(object):
     """IOManager handles converting between dictionaries of GraphNode objects and
