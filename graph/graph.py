@@ -80,7 +80,7 @@ class Graph(object):
         graph_cache[oi] = new_node
         recurse = True
       node.neighbours[oi] = new_node
-      node.distances[oi] = abs(h - oh)
+      node.distances[oi] = abs(h - oh) + 1
       if recurse:
         self._toGraphNode(new_node, nx, ny, oh)
 

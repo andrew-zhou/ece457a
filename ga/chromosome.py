@@ -74,7 +74,7 @@ class Chromosome(object):
         node_id = list(node.neighbours)[idx]
         if node_id in removed_graph:
           # node removed, bad path
-          break
+          self.fitness += 10
         if (node_id == self.goal):
           #reached goal node
           reached = True
@@ -100,7 +100,7 @@ class Chromosome(object):
         node_id = list(node.neighbours)[idx]
         if node_id in removed_graph:
           # node removed, bad path
-          break
+          continue
         node = node.neighbours[node_id]
         if (node_id == self.goal):
           #reached goal node

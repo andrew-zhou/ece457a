@@ -9,7 +9,7 @@ from population import Population
 from graph import Graph
 
 def main():
-  routes = [(1, 226), (5, 227), (9, 228), (13, 229), (17, 230)]
+  routes = [(1, 226), (9, 228), (17, 230)]
   raw_graph = Graph()
   graph = raw_graph.toGraphNode()
   # IOManager.export_graph(graph, '../aco/waterloo.ecegraph')
