@@ -158,7 +158,7 @@ class Graph(object):
     plt.imshow(coord, cmap='hot', interpolation='nearest')
     for scat, route in zip(scatters, routes):
       c = next(colors)
-      plt.scatter(scat[0], scat[1], s=10, color=c)
+      plt.plot(scat[0], scat[1], color=c)
       start = self.id_xy[route[0]]
       end = self.id_xy[route[1]]
       rX = [start[0], end[0]]
@@ -180,6 +180,15 @@ class Graph(object):
     coord = np.array(new_map, dtype=float)
     plt.imshow(coord, cmap='hot', interpolation='nearest')
     plt.scatter(scatX, scatY, s=10)
+    plt.show()
+
+  def plotMap(self):
+    new_map = []
+    for i in range(self.height):
+      new_map.append(self.map[i][:self.width])
+
+    coord = np.array(new_map, dtype=float)
+    plt.imshow(coord, cmap='hot', interpolation='nearest')
     plt.show()
 
   def plotMovement(self, movements):
