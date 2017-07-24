@@ -4,6 +4,7 @@ import argparse
 import copy
 import random
 import threading
+import time
 
 from graph.iomanager import IOManager
 from aco.aconode import ACONode
@@ -81,8 +82,11 @@ if __name__ == '__main__':
 	goals = [int(g) for g in args.goals]
 
 	solver = ACOSolver(args.graph, goals)
+	start_time = time.time()
 	score, solutions, order = solver.solve()
+	end_time = time.time()
 	solutions = [soln[0] for soln in solutions]
 	print('Best overall score: {}'.format(score))
 	print('Best order of goal nodes: {}'.format(order))
 	print('Best path solutions: {}'.format(solutions))
+	print('Overall time: {}'.format(end_time - start_time))
