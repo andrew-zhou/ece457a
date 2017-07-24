@@ -31,6 +31,12 @@ class Ant(threading.Thread):
             if not next_:
                 break
             self._traverse(next_)
+        # Add forbidden penalties to cost
+        for idx in range(len(self.route) - 1):
+            start = self.route[idx].id
+            end = self.route[idx + 1].id
+            if (start, end) in self.forbidden_moves or (end, start) in self.forbidden_moves:
+                self.cost += acoconstants.FORBIDDEN_PENALTY
         self.complete = True
 
     def _pick_next(self):
@@ -40,9 +46,6 @@ class Ant(threading.Thread):
         for n_id, neighbour in self.location.neighbours.items():
             # Ignore if already visited
             if neighbour in self.route:
-                continue
-            # Ignore if forbidden move
-            if self._is_forbidden(n_id):
                 continue
             pheromones = self.pheromone_map.get((self.location.id, n_id), 0.0)
             desirability = 1.0 / self.location.cost_to(neighbour.id)

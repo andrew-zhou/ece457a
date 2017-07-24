@@ -16,6 +16,7 @@ MIN_DIST = 1
 MAX_DIST = 10
 MAX_NEIGHBOURS = 2
 START_NODE = 1
+FORBIDDEN_PENALTY = 10.0
 
 # Meta Parameters
 NUM_CHROMOSOMES = 10  # This should always be even
