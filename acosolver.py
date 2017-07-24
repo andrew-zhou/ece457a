@@ -12,10 +12,24 @@ from aco.acoconstants import NUM_CHROMOSOMES, NUM_GENERATIONS, MUTATE_RATE, CROS
 from aco.acochromosome import ACOChromosome
 
 class ACOSolver(object):
-	def __init__(self, fname, goals):
-		self.goals = goals
-		self._setup_graph(fname)
-		self._setup_chromosomes()
+	def __init__(self):
+		pass
+
+	@classmethod
+	def from_fname(self, fname, goals):
+		obj = self()
+		obj.goals = goals
+		obj._setup_graph(fname)
+		obj._setup_chromosomes()
+		return obj
+
+	@classmethod
+	def from_graph(self, graph, goals):
+		obj = self()
+		obj.goals = goals
+		obj.graph = graph
+		obj._setup_chromosomes()
+		return obj
 
 	def _setup_graph(self, fname):
 		self.graph = IOManager.import_graph(fname, ACONode)
@@ -80,8 +94,7 @@ if __name__ == '__main__':
 	parser.add_argument('--goals', nargs='+', help='Goal node ids for drones', required=True)
 	args = parser.parse_args()
 	goals = [int(g) for g in args.goals]
-
-	solver = ACOSolver(args.graph, goals)
+	solver = ACOSolver.from_fname(args.graph, goals)
 	start_time = time.time()
 	score, solutions, order = solver.solve()
 	end_time = time.time()

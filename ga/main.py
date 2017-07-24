@@ -20,6 +20,9 @@ def main():
   goals = [int(g) for g in args.goals]
   graph = IOManager.import_graph(args.graph)
 
+  # IOManager.export_graph(graph, '../aco/waterloo.ecegraph')
+  # graph = IOManager.import_graph('../aco/waterloo.ecegraph')
+
   paths = []
   removed = {}
   start_time = time.time()

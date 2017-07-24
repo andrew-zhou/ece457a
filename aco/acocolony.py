@@ -12,7 +12,7 @@ class ACOColony(object):
 		"""
 		self.graph = graph
 		self.best_path = None
-		self.best_cost = math.inf
+		self.best_cost = float('inf')
 		self.pheromone_map = {}
 		self.forbidden_moves = forbidden_moves
 		self.goal = goal

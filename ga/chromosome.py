@@ -4,7 +4,7 @@ import copy
 
 from gaconstants import CHROMOSOME_LEN
 from gaconstants import MAX_GENE
-from gaconstants import SINGLE_VALUE_CROSSOVER_ALPHA
+from gaconstants import SINGLE_VALUE_CROSSOVER_ALPHA, CONFLICT_COST
 
 class Chromosome(object):
     def __init__(self, goal):
@@ -74,7 +74,7 @@ class Chromosome(object):
         node_id = list(node.neighbours)[idx]
         if node_id in removed_graph:
           # node removed, bad path
-          self.fitness += 10
+          self.fitness += CONFLICT_COST
         if (node_id == self.goal):
           #reached goal node
           reached = True
@@ -82,7 +82,7 @@ class Chromosome(object):
         self.fitness += node.cost_to(node_id)
         node = node.neighbours[node_id]
       if not reached:
-        self.fitness += 100
+        self.fitness += 1000
 
     def print_path(self, graph, removed_graph):
       node = graph
@@ -100,7 +100,7 @@ class Chromosome(object):
         node_id = list(node.neighbours)[idx]
         if node_id in removed_graph:
           # node removed, bad path
-          continue
+          pass
         node = node.neighbours[node_id]
         if (node_id == self.goal):
           #reached goal node

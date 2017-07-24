@@ -23,13 +23,13 @@ def step_cost(node, neighbour):
 	# - Height = neighbour.pos.z
 	newX, newY, newZ = neighbour.pos
 	if newZ < 0 or newY < 0 or newY > len(HEIGHT_MAP) - 1 or newX < 0 or newX > len(HEIGHT_MAP[0]) - 1:
-		return math.inf
+		return float('inf')
 
 	length_cost = 1
 	if newZ > HEIGHT_MAP[newY][newX]:
 		collision_cost = 0
 	else:
-		collision_cost = math.inf
+		collision_cost = float('inf')
 	height_cost = newZ
 	return length_cost + collision_cost + height_cost
 

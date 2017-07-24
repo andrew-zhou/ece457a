@@ -86,7 +86,7 @@ class Ant(threading.Thread):
         if not self.complete:
             return None
         if not self.route[-1].id == self.goal:
-            return math.inf
+            return float('inf')
         return self.cost
 
     def _is_forbidden(self, move):

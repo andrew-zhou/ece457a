@@ -138,7 +138,7 @@ class Graph(object):
     plt.imshow(coord, cmap='hot', interpolation='nearest')
     plt.show()
 
-  def plotMovementsMultiPaths(self, paths, routes):
+  def plotMovementsMultiPaths(self, paths, routes, save_file):
     colors = itertools.cycle(['g', 'b', 'c', 'm', 'y', 'k', 'w'])
     new_map = []
     for i in range(self.height):
@@ -164,7 +164,9 @@ class Graph(object):
       rX = [start[0], end[0]]
       rY = [start[1], end[1]]
       plt.scatter(rX, rY, s=40, color=c)
-    plt.show()
+    plt.savefig(save_file)
+    plt.close()
+    # plt.show()
 
   def plotMovementsIds(self, ids):
     new_map = []

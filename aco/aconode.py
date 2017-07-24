@@ -9,4 +9,4 @@ class ACONode(object):
         self.distances = {}
 
     def cost_to(self, id):
-        return self.distances.get(id, math.inf)
+        return self.distances.get(id, float('inf'))
