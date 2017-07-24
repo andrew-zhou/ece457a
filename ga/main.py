@@ -1,6 +1,7 @@
 import sys
 import time
 import argparse
+import copy
 sys.path.insert(0, '../graph')
 
 from iomanager import IOManager

@@ -19,6 +19,27 @@ class Chromosome(object):
       self._generate_random_data()
 
     @classmethod
+    def calc_costs(cls, path, graph, goal, removed_graph):
+      cost = 0
+      reached = False
+      node = graph[path[0]]
+      for p in path[1:]:
+        cost += 1
+        if p in removed_graph:
+          # node removed, bad path
+          cost += CONFLICT_COST
+        if (p == goal):
+          #reached goal node
+          reached = True
+          break
+        cost += node.cost_to(p)
+        node = graph[p]
+      if not reached:
+        cost += 1000
+      return cost
+
+
+    @classmethod
     def from_chromosome(cls, chromo):
       c = cls(chromo.goal)
       for i in range(CHROMOSOME_LEN):
