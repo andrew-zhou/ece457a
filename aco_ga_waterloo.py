@@ -39,7 +39,7 @@ def main():
       removed[p] = p
 
   if raw_graph != None:
-    # raw_graph.plotMovementsMultiPaths(solutions, routes, './result/aco.png')
+    raw_graph.plotMovementsMultiPaths(solutions, routes, './result/aco.png')
     raw_graph.plotMovementsMultiPaths(paths, routes, './result/ga.png')
 
 
