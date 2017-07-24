@@ -24,7 +24,6 @@ class Chromosome(object):
       reached = False
       node = graph[path[0]]
       for p in path[1:]:
-        cost += 1
         if p in removed_graph:
           # node removed, bad path
           cost += CONFLICT_COST
@@ -83,7 +82,6 @@ class Chromosome(object):
       node = graph
       reached = False
       for gene in self.data:
-        self.fitness += 1
         neighbour_size = len(node.neighbours)
         if neighbour_size == 0:
           # end of graph
