@@ -1,4 +1,5 @@
 import sys
+import copy
 
 sys.path.insert(0, '../graph')
 
@@ -44,6 +45,19 @@ class Graph(object):
     self.finish_pos = (self.width - 1, self.height - 1, self.get(self.width-1, self.height-1)+1)
     self.pos = (start_pos[0], start_pos[1], self.map[0][0]+1)
     self.movement = [self.pos]
+
+  def getNormalizeHeight(self):
+    minH = float('inf')
+    for y in range(self.height):
+      for x in range(self.width):
+        if self.get(x, y) < minH:
+          minH = self.get(x, y)
+
+    normalizeMap = copy.deepcopy(self.map)
+    for y in range(self.height):
+      for x in range(self.width):
+        normalizeMap[y][x] = self.map[y][x] - minH
+    return normalizeMap
 
   def toGraphNode(self):
     graph_cache.clear()
@@ -164,6 +178,10 @@ class Graph(object):
       rX = [start[0], end[0]]
       rY = [start[1], end[1]]
       plt.scatter(rX, rY, s=40, color=c)
+    # nor_map = self.getNormalizeHeight()
+    # for y in range(self.height):
+    #   for x in range(self.width):
+    #     plt.text(x, y, str(int(nor_map[y][x])), va='center', ha='center')
     plt.savefig(save_file)
     plt.close()
     # plt.show()
@@ -182,6 +200,10 @@ class Graph(object):
     coord = np.array(new_map, dtype=float)
     plt.imshow(coord, cmap='hot', interpolation='nearest')
     plt.scatter(scatX, scatY, s=10)
+
+    for y in range(self.height):
+      for x in range(self.width):
+        plt.text(x, y, str(self.get(x, y)), va='center', ha='center')
     plt.show()
 
   def plotMap(self):
@@ -191,7 +213,12 @@ class Graph(object):
 
     coord = np.array(new_map, dtype=float)
     plt.imshow(coord, cmap='hot', interpolation='nearest')
+    nor_map = self.getNormalizeHeight()
+    for y in range(self.height):
+      for x in range(self.width):
+        plt.text(x, y, str(int(nor_map[y][x])), va='center', ha='center')
     plt.show()
+    plt.close()
 
   def plotMovement(self, movements):
     scatX = [self.pos[0]]
