@@ -60,19 +60,121 @@ Prior studies have thus far been inconclusive in determining whether GA techniqu
 The multi-drone path planning techniques discussed in this paper break down the problem into a series of single-drone path planning subproblems. These subproblems are solved using a combination of techniques similar to the literature (GA-based) as well as more novel approaches through ant colony optimization (ACO) methods. The methods for reducing the multi-drone problem are themselves unique and not considered in prior literature.
 
 \section{Problem Formulation and Modeling}
-Based on the papers we reviewed, we decided to reduce the problem from a three dimensional space coordinate system to a graph of waypoints. By reducing the problem this way, we ended up with a basic graph traversal problem which reduces the search space of the problem drastically as it is now essentially a two dimensional problem. The graph is represented as an adjacency list to have a compact way of storing the graph in memory at the cost of edge look-up time. Each waypoint in the graph represents a group of neighbouring points in three dimensional space whereas the cost to move from one waypoint to another is calculated by taking the average of the real world cost between the waypoints. To reduce the search space into two dimensions, the cost function accounts for the altitude changes as well as other important factors like distance, danger zones and power consumption. Therefore, our cost function can be expressed as:
-$$F_{cost} = C_{distance} + C_{altitude} + C_{danger zones} + C_{power}$$
-The cost for distance, power and altitude are fairly self explanatory as they are calculated by measuring the power consumption, distance and altitude that the drone has to travel between points A and B.
 
-Danger zones of areas that the drone should try to avoid such as high traffic areas, areas that are close to buildings or infrastructure. The drone will try to avoid danger zones if possible but  The danger zone calculation is as follows: 
+\subsection{Environment Modeling}
+The environment that the drones will operate in can be represented by a two-dimensional heightmap with width $w$ and length $l$
+$$H : (x, y) \rightarrow \mathbb{R}$$
+where $0 \leq x \leq w$ and $0 \leq y \leq l$. The value fo $H(x, y)$ represents the height of the surface in meters above sea level.
 
-$$ C_{danger zones} = \frac{L_{inside}}{\sum_{i=1}^{n} d_{i}} $$
+Based on the papers we reviewed, we decided to reduce the problem from a three dimensional space to an undirected graph of waypoints. By reducing the problem this way, we ended up with a basic graph traversal problem which reduces the search space of the problem drastically as it is now essentially a two dimensional problem. The graph is represented as an adjacency list to have a compact way of storing the graph in memory at the cost of edge look-up time. Each waypoint in the graph represents a group of neighbouring points in three dimensional space.
 
-The calculation consists of $L_{inside}$, which is the portion of path that is inside a danger zone and the summation of $d_{i}$, which is the diameter of each danger zone. This way, the path is penalized more for passing through when there are a few danger zones as opposed to many danger zones \cite{b1}. 
+Thus, the environment can be represented now as a node graph be $G = (V, E)$ where $V, E$ is the set of waypoints and edges respectively. Let $N(v) = \{ u | uv \in E \}$ represent the neighbourhood of waypoint $v$.
+
+\subsection{Problem Modeling}
+Assume there are $n$ drones. Assume all drones start at waypoint $v_s$ and wish to arrive at different waypoints such that drone $i$ wishes to arrive at waypoint $v_{gi}$.
+
+The state space is a set of paths for each drone. It can be modeled as a set $S = \{S_1, ..., S_n\}$ such that $S_i$ is a list of $k$ nodes where $S_i : \{1, ..., k\} \rightarrow E$.
+
+The initial state is a random set of paths such that each drone begins at the start waypoint. Thus if the current state is $S$, then for each $S_i$, $S_i(1) = v_sv_a$ where $v_a \in V$ and $v_a\neq v_s$.
+
+The goal state is a set of paths such that each drone begins at the start waypoint $v_s$ and ends at their associated end waypoint $v_{gi}$.
+
+The goal test is to make sure that for each $S_i$, $S_i(1) = v_sv_a$ and $S_i(k) = v_bv_{gi}$ where $v_a, v_b \in V$ and $v_a, v_b \neq v_s, v_{gi}$.
+
+For a given state $S$, the successor function $T$ defines the function to transition to the next state. More specifically, $T$ changes one edge in a single drone's path. Assume the path of drone $i$ is being changed. Thus
+$$ T(S_i) = S_i' = \{ v_sv_1, ... \} $$
+such that there exists $ 1 < j \leq |S_i| $ where
+\begin{itemize}
+\item $S_i(j) = v_av_b, S_i'(j) = v_av_b'$
+\item $S_i(j+1) = v_bv_c, S_i'(j+1) = v_b'v_c$
+\item $S_i(k) = S_i'(k)$ for all $k \neq j, j+1$
+\end{itemize}
+for $v_b' \in N(v_b)$ where $v_av_b', v_b'v_c \in E$.
+
+The cost to move from one waypoint to a neighbouring waypoint is calculated by taking the average of the real world cost between the waypoints. To reduce the search space into two dimensions, the cost function accounts for the altitude and distance changes. In addition, it penalizes ground collision, entering danger zones, and excess power consumption. Therefore, our cost function can be expressed as:
+\begin{equation} \label{eq:cost}
+\begin{split}
+C(v_av_b) &= C_{distance}(v_av_b) + C_{altitude}(v_av_b) \\
+&+ C_{ground collision}(v_av_b) + C_{danger zones}(v_av_b) \\
+&+ C_{power}(v_av_b)
+\end{split}
+\end{equation}
+where $v_av_b \in E$.
+
+Danger zones are areas that the drone should avoid. For this scenario, each drone's current path is a danger zone for other drones flying in the area.
 
 \section{Proposed Solution}
-% TODO: Jason
-\blindtext
+Below is a 200 by 100 heightmap of the Waterloo region
+\begin{figure}[htbp] \label{img:heightmap1}
+\centerline{\includegraphics[width=0.4\textwidth]{images/heightmap_orig.png}}
+\caption{200 by 100 heightmap of the Waterloo region}
+\label{fig}
+\end{figure}
+where $1 unit * 6 \frac{arcsecond}{unit} * 30 \frac{meters}{arcsecond} = 180m$
+
+In the reduction of the heightmap to a node graph, each unit square is represented by a waypoint. Thus this heightmap will reduce to a node graph with $200 * 100 = 20000$ nodes. In order to reduce the runtime of the proposed solution, reduce the complexity of the graph by only looking at the top left 20 by 10 section of the original heightmap. This is shown below
+\begin{figure}[htbp] \label{img:heightmap2}
+\centerline{\includegraphics[width=0.4\textwidth]{images/heightmap.png}}
+\caption{20 by 10 heightmap of the Waterloo region}
+\label{fig}
+\end{figure}
+where the number at cell $(x, y)$ represents the value of $H(x, y)$.
+
+Consider a 5 by 5 section of \ref{img:heightmap2} centered at $(x, y) = (10, 5)$, then the associate reduced node graph would look like
+\begin{figure}[htbp] \label{img:nodegraph5}
+\centerline{\includegraphics[width=0.4\textwidth]{images/nodegraph5.png}}
+\caption{Reduced node graph for 5 by 5 of \ref{img:heightmap2}}
+\label{fig}
+\end{figure}
+
+\subsection{Initial Solution}
+Given lol, an initial solution $S$ is illustrated below
+\begin{figure}[htbp] \label{img:solution_aco}
+\centerline{\includegraphics[width=0.4\textwidth]{images/solution_aco.png}}
+\caption{Sample initial solution for problem}
+\label{fig}
+\end{figure}
+
+\subsection{Solving Strategy}
+Clearly, the initial solution is not optimal nor does it pass the goal test since it.
+
+In order to optimize solution and evolve it towards the goal state, the paper proposes the use of ant colony optimization to optimize each of the drone's path from the start to end waypoints.
+
+If ACO is used blindly for each drone, then there is no way to ensure that their paths won't collide. Therefore, a synchronization step is needed between all instances of the ACO algorithm to exchange information about the current path for each drone. To compute $C_{danger zones}(v_av_b)$ in \ref{eq:cost} for each drone, a priority order needs to be defined in order to deterministically state which danger zones are present in a certain drone's environment. Given $n$ drones with the ordering $d_1, ..., d_n$, then $d_i$ would contain the danger zones for all drones $1$ to $i-1$. Suppose the path for drone $i$ is $S_i$ where edge $v_av_b \in S_i$. Then $C_{danger zones}(v_av_b) = 10*n$ where $0 \leq n \leq i-1$ is the number of drones paths that contain the same edge $v_av_b$.
+
+Finding the optimal ordering of $n$ drones that yields the lowest total path cost of all drones is a hard task. The proposed solution will use a permutation genetic algorithm to find this optimal ordering. The genotype of the algorithm is represented as an ordered list of drone IDs. This permutation genetic algorithm uses cycle-based crossover and the swap mutation operator. When selecting the members that survive to the next generation, the elitism model is used which keeps the fittest chromosome from each generation and replaces all other members.
+
+\subsection{Cost Function}
+Given a solution $S$ for $n$ drones, the cost for drone $i$ is 
+\begin{equation} \label{eq:costdrone}
+C_i = \sum_{j=1}^|S_i| C(S_i(j)) \quad \text{where} \quad C(v_av_b) \text{ is from \ref{eq:cost}}
+\end{equation}
+
+The cost of the entire solution $S$ is simply
+\begin{equation} \label{eq:costsolution}
+C_S = \sum_{i=1}^n C_i = \sum_{i=1}^n \sum_{j=1}^|S_i| C(S_i(j))
+\end{equation}
+
+\subsection{Neighbourhood Operator}
+Within the context of the three-dimensional heightmap, the neighbourhood for a cell at $(x, y)$ contains all adjacent horizontal, vertical, and diagonal cells to $(x, y)$. Thus, when the heightmap is reduced to a node graph $G = (V, E)$, then $\forall v \in V$, $3 \leq deg(v) \leq 8$.
+
+Assume the heightmap has width $w$ and length $l$. Let $f(v) : V \rightarrow [w, l] \times [w, l]$ return the cell location for a node in the original three-dimensional heightmap. Thus for drone $i$ with path $S_i$, the neighbourhood operate $N(v)$ is represented as
+\begin{equation} \label{eq:neighbourhood}
+N(v) = \{ u | abs(f(u) - f(v)) \leq (1, 1) \}
+\end{equation}
+
+% Talk about ACO ????
+% Look at ant.py _pick_next:
+
+\subsection{Parameter Selection}
+
+\subsection{Algorithm Demonstration}
+\subsubsection{Genetic Algorithm}
+
+\subsubsection{Ant Colony Optimization}
+
+\subsection{Implementation}
+The implementation for the proposed solution is located in the \verb|aco| directory. The file \verb|acosolver.py| in the root directory is the script used to run the proposed solution. The detailed instructions for usage of the script is in the user guide located in \verb|README| in the root project directory. 
 
 \section{Performance Evaluation}
 % TODO: Tony
@@ -82,12 +184,10 @@ The calculation consists of $L_{inside}$, which is the portion of path that is i
 % TODO: Zuqi
 \blindtext
 
-\section*{References}
-
 \begin{thebibliography}{00}
-\bibitem{b1} Roberge, Vincent, Mohammed Tarbouchi, and Gilles Labont. "Comparison of parallel genetic algorithm and particle swarm optimization for real-time UAV path planning." IEEE Transactions on Industrial Informatics 9.1 (2013): 132-141
-\bibitem{b2} Tu, Jianping, and Simon X. Yang. "Genetic algorithm based path planning for a mobile robot." Robotics and Automation, 2003. Proceedings. ICRA'03. IEEE International Conference on. Vol. 1. IEEE, 2003
-\bibitem{b3} Masehian, Ellips, and DavoudSedighizadeh. "A multi-objective PSO-based algorithm for robot path planning." Industrial Technology (ICIT), 2010 IEEE International Conference on. IEEE, 2010
+\bibitem{b1} Roberge, Vincent, Mohammed Tarbouchi, and Gilles Labont. ``Comparison of parallel genetic algorithm and particle swarm optimization for real-time UAV path planning.'' IEEE Transactions on Industrial Informatics 9.1 (2013): 132-141
+\bibitem{b2} Tu, Jianping, and Simon X. Yang. ``Genetic algorithm based path planning for a mobile robot.'' Robotics and Automation, 2003. Proceedings. ICRA'03. IEEE International Conference on. Vol. 1. IEEE, 2003
+\bibitem{b3} Masehian, Ellips, and DavoudSedighizadeh. ``A multi-objective PSO-based algorithm for robot path planning.'' Industrial Technology (ICIT), 2010 IEEE International Conference on. IEEE, 2010
 \end{thebibliography}
 
 \end{document}
