@@ -60,8 +60,15 @@ Prior studies have thus far been inconclusive in determining whether GA techniqu
 The multi-drone path planning techniques discussed in this paper break down the problem into a series of single-drone path planning subproblems. These subproblems are solved using a combination of techniques similar to the literature (GA-based) as well as more novel approaches through ant colony optimization (ACO) methods. The methods for reducing the multi-drone problem are themselves unique and not considered in prior literature.
 
 \section{Problem Formulation and Modeling}
-% TODO: Jake
-\blindtext
+Based on the papers we reviewed, we decided to reduce the problem from a three dimensional space coordinate system to a graph of waypoints. By reducing the problem this way, we ended up with a basic graph traversal problem which reduces the search space of the problem drastically as it is now essentially a two dimensional problem. The graph is represented as an adjacency list to have a compact way of storing the graph in memory at the cost of edge look-up time. Each waypoint in the graph represents a group of neighbouring points in three dimensional space whereas the cost to move from one waypoint to another is calculated by taking the average of the real world cost between the waypoints. To reduce the search space into two dimensions, the cost function accounts for the altitude changes as well as other important factors like distance, danger zones and power consumption. Therefore, our cost function can be expressed as:
+$$F_{cost} = C_{distance} + C_{altitude} + C_{danger zones} + C_{power}$$
+The cost for distance, power and altitude are fairly self explanatory as they are calculated by measuring the power consumption, distance and altitude that the drone has to travel between points A and B.
+
+Danger zones of areas that the drone should try to avoid such as high traffic areas, areas that are close to buildings or infrastructure. The drone will try to avoid danger zones if possible but  The danger zone calculation is as follows: 
+
+$$ C_{danger zones} = \frac{L_{inside}}{\sum_{i=1}^{n} d_{i}} $$
+
+The calculation consists of $L_{inside}$, which is the portion of path that is inside a danger zone and the summation of $d_{i}$, which is the diameter of each danger zone. This way, the path is penalized more for passing through when there are a few danger zones as opposed to many danger zones \cite{b1}. 
 
 \section{Proposed Solution}
 % TODO: Jason
