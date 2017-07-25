@@ -6,6 +6,7 @@
 \usepackage{textcomp}
 \usepackage[english]{babel}
 \usepackage{blindtext}
+\usepackage{float}
 \usepackage{array}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
@@ -105,21 +106,11 @@ where $v_av_b \in E$.
 Danger zones are areas that the drone should avoid. For this scenario, each drone's current path is a danger zone for other drones flying in the area.
 
 \section{Proposed Solution}
-Below is a 200 by 100 heightmap of the Waterloo region
-\begin{figure}[htbp] \label{img:heightmap1}
-\centerline{\includegraphics[width=0.4\textwidth]{images/heightmap_orig.png}}
-\caption{200 by 100 heightmap of the Waterloo region}
-\label{fig}
-\end{figure}
-where $1 unit * 6 \frac{arcsecond}{unit} * 30 \frac{meters}{arcsecond} = 180m$
+See figure \ref{img:heightmap1} for a 200 by 100 heightmap of the Waterloo region where $1 unit * 6 \frac{arcsecond}{unit} * 30 \frac{meters}{arcsecond} = 180m$
 
-In the reduction of the heightmap to a node graph, each unit square is represented by a waypoint. Thus this heightmap will reduce to a node graph with $200 * 100 = 20000$ nodes. In order to reduce the runtime of the proposed solution, reduce the complexity of the graph by only looking at the top left 20 by 10 section of the original heightmap. This is shown below
-\begin{figure}[htbp] \label{img:heightmap2}
-\centerline{\includegraphics[width=0.4\textwidth]{images/heightmap.png}}
-\caption{20 by 10 heightmap of the Waterloo region}
-\label{fig}
-\end{figure}
-where the number at cell $(x, y)$ represents the value of $H(x, y)$.
+In the reduction of the heightmap to a node graph, each unit square is represented by a waypoint. Thus this heightmap will reduce to a node graph with $200 * 100 = 20000$ nodes. In order to reduce the runtime of the proposed solution, reduce the complexity of the graph by only looking at the top left 20 by 10 section of the original heightmap.
+
+See figure \ref{img:heightmap2} for a reduced 20 by 10 heightmap.
 
 Consider a 5 by 5 section of \ref{img:heightmap2} centered at $(x, y) = (10, 5)$, then the associate reduced node graph would look like
 \begin{figure}[htbp] \label{img:nodegraph5}
@@ -448,6 +439,21 @@ Both the pure GA and the combined ACO and GA algorithm solve the problem of coor
 The combined ACO and GA algorithm is recommended based on the results shown in the performance evaluation. In addition, it optimizes the order of the drones while the pure GA algorithm generates the paths of the drones in a fixed order. Therefore, in theory, the combined ACO and GA algorithm is a superior program.
 
 The proposed solution can be refined by incorporating a more complex cost function. The current implementation does not take into account of drone fuel, power, and ground collision. In addition, the danger zone cost of the current implementation can also be improved by incorporating time. Instead of increasing the cost of previous drones' entire paths, the algorithm can instead predict the position of the other drones at a given time in order to have a more realistic cost function. As a result, this should improve the overall path of the drones as well.
+
+\section{List of Tables}
+
+\section{List of Images}
+\begin{figure}[H]
+\centerline{\includegraphics[width=0.4\textwidth]{images/heightmap_orig.png}}
+\caption{200 by 100 heightmap of the Waterloo region}
+\label{img:heightmap1}
+\end{figure}
+
+\begin{figure}[H] 
+\centerline{\includegraphics[width=0.4\textwidth]{images/heightmap.png}}
+\caption{20 by 10 heightmap of the Waterloo region where the number at cell $(x, y)$ represents the value of $H(x, y)$.}
+\label{img:heightmap2}
+\end{figure}
 
 \begin{thebibliography}{00}
 \bibitem{b1} Roberge, Vincent, Mohammed Tarbouchi, and Gilles Labont. ``Comparison of parallel genetic algorithm and particle swarm optimization for real-time UAV path planning.'' IEEE Transactions on Industrial Informatics 9.1 (2013): 132-141
