@@ -201,7 +201,7 @@ number of ants & $\alpha$ & $\beta$ & path cost & runtime(s) \\
 \hline
 8 & 0.5 & 1.2 & 41.25 & 56.3 \\ 
 \hline
-16 & 0.5 & 1.2 & 37.25 &  97.1 \\ 
+16 & 0.5 & 1.2 & 37.25 & 97.1 \\ 
 \hline
 \end{tabular}
 \end{center}
@@ -269,9 +269,9 @@ Paths generated using GA
 
 Results for two drones. Similar to the results for one drone, tuning the parameters of GA still results in worse cost compared to ACO. 
 
-Pros/cons of each algorithm:  
+Based on the results between ACO and GA, it is clear that ACO has the better runtime performance. This shows that one of the advantages of ACO is that it uses parallelism which greatly improves the runtime of the algorithm. Speed is a big factor in drone delivery and so, a low runtime by ACO is preferred. In addition, by the graphs of the experiments, the paths produced by ACO seemed to be more optimal than the paths produced by GA. Unlike GA, ACO retains memory of the entire colony instead of just previous generation. This allows ACO to choose a better overall path. The disadvantage of ACO is that it uses a lot of parameters, and so the selection of values are mostly experimental. The alpha, beta, ant colony size and evaporation parameters were all determined through many rounds of trial and error until a decent path cost and runtime were observed. Furthermore, the number of iterations that was used in the experiments may not have achieved the best path. Increasing the number of iterations may take too long for a best solution to converge.
 
-Which algorithm best suits this problem:
+%TODO David talk about GA advantages/disadvantages
 
 \section{Conclusions \& Recommendations}
 % TODO: Zuqi

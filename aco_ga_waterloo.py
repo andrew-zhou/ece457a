@@ -27,8 +27,8 @@ def remove_cycle(path):
   return new_path
 
 def main():
-  goals = [226, 228, 230];
-  routes = [(1, goals[0]), (1, goals[1]), (1, goals[2])]
+  goals = [101, 150]
+  routes = [(1, goals[0]), (1, goals[1])]
   raw_graph = Graph(mapfile__name='./graph/waterloo.map')
   # path = [1, 23, 45, 66, 88, 89, 67, 87, 66, 45, 24, 23, 45, 67, 68, 67, 89, 111, 131, 111, 133, 154, 155, 156, 135, 136, 156, 177, 156, 135, 157, 178, 179, 178, 179, 180, 159, 160, 182, 181, 161, 183, 184, 206, 228, 207, 228, 207, 206, 228, 208, 230]
   # raw_graph.plotMovementsMultiPaths([path], [(1, 230)], './result/before_ga.png')
