@@ -168,6 +168,19 @@ N(v) = \{ u | abs(f(u) - f(v)) \leq (1, 1) \}
 % Look at ant.py _pick_next:
 
 \subsection{Parameter Selection}
+\subsubsection{Genetic Algorithm}
+For GA, the following parameters were used:\\
+\textbf{Population size: } 200 \\
+A large population size greatly increase the runtime of the GA algorithm, while a small population won't generate enough diversity to find a suitable path. A population size of 200 was the sweet spot that generated the most consistent solution under a good runtime.\\
+\textbf{Iteration number: } 100 \\
+Iteration number is similar to population size, as it increases runtime at large iterations, and decrease solution consistency at low iterations, an iteration number of 100 had consistent solution with good runtime \\
+\textbf{Tournament size: } 10 \\
+Tournament size affects the possibility that a non-optimal parent to be selected for cross over. The greater the tournament size, the less likely that will happen. A tournament size of 10 ensured that an optimal parent will be picked most of the time, and only occasionally a non-optimal parent is picked.\\
+\textbf{Elitism rate: } 0.4 \\
+Elitism rate affects the number of survivors for each generation. A rate of 0.4, in other words the top 40 percent of the parent will survive, ensures that most of the good solutions will be kept, and the algorithm will run in reasonable time since less children need to be computed to fill up the population.\\
+\textbf{Mutation rate: } 0.4 \\
+Mutation rate allows the algorithm to escape local minima. A mutation rate of 0.4 ensures that the entire search space will likely be searched, therefore improving the final solution of the algorithm.
+\subsubsection{Ant Colony Optimization}
 
 \subsection{Algorithm Demonstration}
 \subsubsection{Genetic Algorithm}
@@ -199,13 +212,13 @@ For a single drone, the results for GA were the following:
 \hline
 tournament size & elitism rate & mutation rate & number of iterations & path cost & runtime(s) \\ 
 \hline
-10 & 0.2 & 0.7 & 100 & 71 & 76.1 \\ 
+10 & 0.2 & 0.7 & 100 & 40 & 58 \\ 
 \hline
-10 & 0.4 & 0.7 & 100 & 82 &  57.3  \\ 
+10 & 0.4 & 0.7 & 100 & 47.5 &  43  \\ 
 \hline
-30 & 0.2 & 0.7 & 100 & 80.3 &  71.6  \\ 
+30 & 0.2 & 0.7 & 100 & 47 &  57  \\ 
 \hline
-10 & 0.2 & 0.7 & 150 & 66 &  104.6  \\ 
+10 & 0.2 & 0.7 & 150 & 44.5 &  86  \\ 
 \hline
 \end{tabular}
 \end{center}
@@ -237,13 +250,13 @@ For two drones, the results for GA were the following:
 \hline
 tournament size & elitism rate & mutation rate & number of iterations & path cost & runtime(s) \\ 
 \hline
-10 & 0.2 & 0.7 & 100 & 94 & 140.6 \\ 
+10 & 0.2 & 0.7 & 100 & 53 & 112 \\ 
 \hline
-10 & 0.6 & 0.7 & 100 & 113 & 68.5  \\ 
+10 & 0.6 & 0.7 & 100 & 62 & 57  \\ 
 \hline
-30 & 0.2 & 0.7 & 100 & 110 & 130.5  \\ 
+30 & 0.2 & 0.7 & 100 & 59.25 & 112  \\ 
 \hline
-10 & 0.2 & 0.7 & 150 & 86 & 198.5  \\ 
+10 & 0.2 & 0.7 & 150 & 60 & 164  \\ 
 \hline
 \end{tabular}
 \end{center}
