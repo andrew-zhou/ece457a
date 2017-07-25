@@ -10,13 +10,6 @@ Contains the logic for Ant Colony Optimization
 Contains the logic for Genetic Algorithms Optimization
 ### /graph
 Contains the logic for generating graphs used to test the algorithms
-### /report
-Contains the final report
-
-**NOTE**: The list of figures, list of tables, and references do **not** count towards out report length of 6 pages.
-
-### /result
-Contains the outputted path in a png format
 
 ## Setup
 ### running only the ACO algorithm
@@ -44,3 +37,5 @@ this will run both the ACO and GA algorithm using the waterloo.ecegraph map with
 The parameters for the GA can be changed in `ga/gaconstants.py`
 ### ACO
 The parameters for the ACO can be changed in `aco/acoconstants.py`
+
+**NOTE**: The list of figures, list of tables, and references do **not** count towards out report length of 6 pages.
