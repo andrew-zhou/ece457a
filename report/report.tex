@@ -6,6 +6,7 @@
 \usepackage{textcomp}
 \usepackage[english]{babel}
 \usepackage{blindtext}
+\usepackage{array}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
@@ -177,8 +178,87 @@ N(v) = \{ u | abs(f(u) - f(v)) \leq (1, 1) \}
 The implementation for the proposed solution is located in the \verb|aco| directory. The file \verb|acosolver.py| in the root directory is the script used to run the proposed solution. The detailed instructions for usage of the script is in the user guide located in \verb|README| in the root project directory. 
 
 \section{Performance Evaluation}
-% TODO: Tony
-\blindtext
+The metrics used for evaluating each meta-heuristic algorithm are runtime and the cost of the path taken. The experiments are run using the height map of the region of Waterloo. This map contains 231 nodes and 830 edges. The experiments will be conducted using different numbers of drones. In each scenario, the parameters of GA and ACO are tuned to achieve the best performance. 
+
+For a single drone, the results for ACO were the following:
+\begin{center}
+\begin{tabular}{ | m{1cm} | m{1cm}| m{1cm} | m{1.5cm} | m{1.5cm} |} 
+\hline
+number of ants & $\alpha$ & $\beta$ & path cost & runtime(s) \\ 
+\hline
+8 & 0.5 & 1.2 & 41.25 & 56.3 \\ 
+\hline
+16 & 0.5 & 1.2 & 37.25 &  97.1 \\ 
+\hline
+\end{tabular}
+\end{center}
+
+For a single drone, the results for GA were the following:
+\begin{center}
+\begin{tabular}{ | m{1.5cm} | m{1cm}| m{1cm} | m{1.5cm} | m{1.5cm} | m{1.5cm} |} 
+\hline
+tournament size & elitism rate & mutation rate & number of iterations & path cost & runtime(s) \\ 
+\hline
+10 & 0.2 & 0.7 & 100 & 71 & 76.1 \\ 
+\hline
+10 & 0.4 & 0.7 & 100 & 82 &  57.3  \\ 
+\hline
+30 & 0.2 & 0.7 & 100 & 80.3 &  71.6  \\ 
+\hline
+10 & 0.2 & 0.7 & 150 & 66 &  104.6  \\ 
+\hline
+\end{tabular}
+\end{center}
+
+\includegraphics[scale=0.5]{performance/aco_1_drone}
+Path generated using ACO
+
+\includegraphics[scale=0.5]{performance/ga_1_drone}
+Path generated using GA
+
+Results for one drone: For GA, increasing the number of iterations, and varying the mutation rate and elitism rate and tournament size. The cost and time is worse than ACO
+
+For two drones, the results for ACO were the following:
+\begin{center}
+\begin{tabular}{ | m{1cm} | m{1cm}| m{1cm} | m{1.5cm} | m{1.5cm} |} 
+\hline
+number of ants & $\alpha$ & $\beta$ & path cost & runtime(s) \\ 
+\hline
+8 & 0.5 & 1.2 & 53.75 & 83.5 \\ 
+\hline
+16 & 0.5 & 1.2 & 48.75 & 165.5 \\ 
+\hline
+\end{tabular}
+\end{center}
+
+For two drones, the results for GA were the following:
+\begin{center}
+\begin{tabular}{ | m{1.5cm} | m{1cm}| m{1cm} | m{1.5cm} | m{1.5cm} | m{1.5cm} |} 
+\hline
+tournament size & elitism rate & mutation rate & number of iterations & path cost & runtime(s) \\ 
+\hline
+10 & 0.2 & 0.7 & 100 & 94 & 140.6 \\ 
+\hline
+10 & 0.6 & 0.7 & 100 & 113 & 68.5  \\ 
+\hline
+30 & 0.2 & 0.7 & 100 & 110 & 130.5  \\ 
+\hline
+10 & 0.2 & 0.7 & 150 & 86 & 198.5  \\ 
+\hline
+\end{tabular}
+\end{center}
+
+\includegraphics[scale=0.5]{performance/aco_2_drone}
+Paths generated using ACO
+
+\includegraphics[scale=0.5]{performance/ga_2_drone}
+Paths generated using GA
+
+Results for two drones. Similar to the results for one drone, tuning the parameters of GA still results in worse cost compared to ACO. 
+
+Pros/cons of each algorithm:  
+
+Which algorithm best suits this problem:
 
 \section{Conclusions \& Recommendations}
 % TODO: Zuqi
