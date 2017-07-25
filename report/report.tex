@@ -191,7 +191,7 @@ Mutation rate allows the algorithm to escape local minima. A mutation rate of 0.
 The implementation for the proposed solution is located in the \verb|aco| directory. The file \verb|acosolver.py| in the root directory is the script used to run the proposed solution. The detailed instructions for usage of the script is in the user guide located in \verb|README| in the root project directory. 
 
 \section{Performance Evaluation}
-The metrics used for evaluating each meta-heuristic algorithm are runtime and the cost of the path taken. The experiments are run using the height map of the region of Waterloo. This map contains 231 nodes and 830 edges. The experiments will be conducted using different numbers of drones. In each scenario, the parameters of GA and ACO are tuned to achieve the best performance. 
+The metrics used for evaluating each meta-heuristic algorithm are runtime and the cost of the path taken. The experiments were ran using the height map of the region of Waterloo. This map contains 231 nodes and 830 edges. The experiments were conducted using varying numbers of drones. In each scenario, the parameters of GA and ACO are tuned to achieve the best performance. Ten trials were ran with each set of parameters and the averages of the results are listed below.
 
 For a single drone, the results for ACO were the following:
 \begin{center}
@@ -199,7 +199,7 @@ For a single drone, the results for ACO were the following:
 \hline
 number of ants & $\alpha$ & $\beta$ & path cost & runtime(s) \\ 
 \hline
-8 & 0.5 & 1.2 & 41.25 & 56.3 \\ 
+8 & 0.5 & 1.2 & 41.25 & 56.3 \\
 \hline
 16 & 0.5 & 1.2 & 37.25 & 97.1 \\ 
 \hline
@@ -293,6 +293,31 @@ With two drones:
 path cost & runtime(s) \\ 
 \hline
 57.25 & 17.6 \\
+\hline
+\end{tabular}
+\end{center}
+
+Tests were also conducted with various other combinations of parameters for ACO which resulted in worse performance or worse results. The results for these tests are as follows:
+\begin{center}
+\begin{tabular}{ | m{1cm} | m{1cm}| m{1cm} | m{1.5cm} | m{1.5cm} |} 
+\hline
+number of drones & number of ants & $\alpha$ & $\beta$ & path cost & runtime(s) \\ 
+\hline
+1 & 8 & 0.3 & 0.9 & 48.25 & 72.4 \\
+\hline
+1 & 16 & 0.3 & 0.9 & 43.25 & 101.3 \\ 
+\hline
+1 & 8 & 1.2 & 0.5 & 46.5 & 55.8 \\
+\hline
+1 & 16 & 1.2 & 0.5 & 41.5 & 92.4 \\
+\hline
+2 & 8 & 0.3 & 0.9 & 59 & 90.6 \\
+\hline
+2 & 16 & 0.3 & 0.9 & 57.25 & 192.4 \\ 
+\hline
+2 & 8 & 1.2 & 0.5 & 57.5 & 86.4 \\
+\hline
+2 & 16 & 1.2 & 0.5 & 55 & 178.2 \\
 \hline
 \end{tabular}
 \end{center}
