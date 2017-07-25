@@ -273,6 +273,30 @@ Based on the results between ACO and GA, it is clear that ACO has the better run
 
 %TODO David talk about GA advantages/disadvantages
 
+In addition, the usage of an A* algorithm for finding individual drone paths with GA running above it for determining an optimal ordering of the drones was conducted as a baseline. The heuristic function for each waypoint in the A* algorithm was based off the aforementioned cost function for mapping three-dimensional space into waypoints with the (x, y, z) positions being used to approximate distance to the goal. This baseline approach was found to perform worse than the above metaheuristic approaches with the following results:
+
+With one drone:
+\begin{center}
+\begin{tabular}{ | m{1cm} | m{1cm}| m{1cm} | m{1.5cm} | m{1.5cm} |} 
+\hline
+path cost & runtime(s) \\ 
+\hline
+55.75 & 14.0 \\
+\hline
+\end{tabular}
+\end{center}
+
+With two drones:
+\begin{center}
+\begin{tabular}{ | m{1cm} | m{1cm}| m{1cm} | m{1.5cm} | m{1.5cm} |} 
+\hline
+path cost & runtime(s) \\ 
+\hline
+57.25 & 17.6 \\
+\hline
+\end{tabular}
+\end{center}
+
 \section{Conclusions \& Recommendations}
 % TODO: Zuqi
 For determining the optimal flight path of multiple package delivering drones for the Amazon Prime Air Traffic Control, a pure GA path finder algorithm and a combined ACO and GA path finder algorithm were implemented. Each algorithm will optimize the drones' flight paths given a region of height map, a set of initial locations, and a set of destinations. The fitness/cost function of both algorithms is defined as the sum of the distance cost, the height cost, and the danger zone cost. A danger zone is defined as the points of intersections between drones.
