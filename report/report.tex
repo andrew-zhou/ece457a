@@ -194,9 +194,113 @@ The beta value affects the influence of the path cost on the ant's decision when
 Evaporation rate is how fast pheromones are evaporated from the edges of the graph. An evaporation rate of 0.4 ensures that the ants won't be bounded by old paths for a long period of time, which leads to new paths being discovered.
 
 \subsection{Algorithm Demonstration}
-\subsubsection{Genetic Algorithm}
+For the reduced version of the problem, assume the three-dimensional heightmap is 
+$$H =
+\begin{bmatrix}
+    v_{11}=3 & v_{12}=4 & v_{13}=1 \\
+    v_{21}=1 & v_{22}=9 & v_{23}=13 \\
+    v_{31}=2 & v_{32}=14 & v_{33}=8
+\end{bmatrix}
+$$
+In addition, assume there are two drones that start at $v_{11}$ and end at $v_{32}, v_{33}$ respectively. Suppose the first drone's path is already determined to be $S_1 = \{ v_{11}v_{21}, v_{21}v_{31}, v_{31}v_{32} \}$. Two hand iterations will be demonstrated to calculate the second drone's path.
+
+Assume the cost function for the reduced problem is
+\begin{equation} \label{eq:costreduced}
+\begin{split}
+C(S_i) &= \begin{cases} 1000 \text{ if goal} \in S_i \\ 0 \text{ otherwise} \end{cases} + \sum_{uv \in S_i} C(uv) \\
+C(uv) &= (1 + abs(H(v) - H(u)) + \begin{cases} 100 \text{ if } uv \in S_1 \\ 0 \text{ otherwise} \end{cases}
+\end{split}
+\end{equation}
 
 \subsubsection{Ant Colony Optimization}
+Assume there are two ants where $\alpha = 0.5, \beta = 1.2$ and evaporation constant $0.2$.
+
+\textbf{First Iteration}:
+\begin{itemize}
+\item Evaporation does nothing since there are no pheromones.
+\item Ant 1 performs a random walk $W_1 = \{ v_{11}v_{21}, v_{21}v_{32}, v_{32}v_{33} \}$
+\item Ant 2 performs a random walk $W_2 = \{ v_{11}v_{12}, v_{12}v_{22}, v_{22}v_{33} \}$
+\item Pheromones are updated such that $Ph(v_{11}v_{21}) = Ph(v_{21}v_{32}) = ... = 1$
+\item The best solution so far is by cost is $W_2$.
+\end{itemize}
+
+\textbf{Second Iteration}:
+Assume $F(uv) = (Ph(uv)^\alpha)(\frac{1}{C(uv)})$.
+\begin{itemize}
+\item Evaporation updates pheromones such that $Ph(v_{11}v_{21}) = Ph(v_{21}v_{32}) = ... = 0.8$
+
+\item Ant 1: Choose $v_{11}v_{12}$
+\begin{align*}
+P(v_{11}v_{21}) &= \frac{F(v_{11}v_{21})}{F(v_{11}v_{21}) + F(v_{11}v_{12})} \\
+&= \frac{0.01}{0.01 + 0.05} = 0.02 \\
+P(v_{11}v_{12}) &= \frac{F(v_{11}v_{12})}{F(v_{11}v_{21}) + F(v_{11}v_{12})} \\
+&= \frac{0.05}{0.01 + 0.05} = 0.98
+\end{align*}
+
+\item Ant 1: Choose $v_{12}v_{22}$
+\begin{align*}
+P(v_{12}v_{13}) &= \frac{F(v_{12}v_{13})}{F(v_{12}v_{13}) + F(v_{12}v_{22})} \\
+&= \frac{0.0}{0.0 + 0.2} = 0.00 \\
+P(v_{12}v_{22}) &= \frac{F(v_{12}v_{22})}{F(v_{12}v_{13}) + F(v_{12}v_{22})} \\
+&= \frac{0.2}{0.0 + 0.2} = 1.0
+\end{align*}
+
+\item Ant 1: Choose $v_{22}v_{33}$. The ant has reached the goal with walk $W_3 = W_2$.
+\begin{align*}
+P(v_{22}v_{23}) &= 0.0 \\
+P(v_{22}v_{33}) &= 1.0
+\end{align*}
+
+\item Ant 2: Chooses the same path as ant 1.
+
+\item Update pheromones so $Ph(v_{11}v_{12}) = Ph(v_{12}v_{22}) = Ph(v_{22}v_{33}) = 2.8$
+
+\item The best solution so far is by cost is $W_2$.
+
+\end{itemize}
+
+\subsubsection{Genetic Algorithm}
+An alternative solution is to use a simple genetic algorithm to optimize the path for each individual drone.
+
+Assume the fitness function is borrowed from \ref{eq:costreduced} such that $f(S_i) = C(S_i)$.
+
+Assume the initial population contains the solutions $P = \{ P_1, P_2 \}$ where
+\begin{align*}
+P_1 &= \{ v_{11}v_{12}, v_{12}v_{22} \} \\
+f(P_1) &= 1000 + (2 + 6) = 1008 \\
+P_2 &= \{ v_{11}v_{21}, v_{21}v_{22}, v_{22}v_{33} \} \\
+f(P_2) &= 0 + (103 + 9 + 2) = 114
+\end{align*}
+
+\textbf{First Iteration}:
+\begin{itemize}
+\item Apply single point crossover at random index 2 between $P_1, P_2$. The new population is $P = \{ P_1, P_2, P_3, P_4 \}$ where
+\begin{align*}
+P_3 &= \{ v_{11}v_{12}, v_{12}v_{22}, v_{22}v_{33} \} \\
+f(P_3) &= 0 + (2 + 6 + 2) = 10 \\
+P_4 &= \{ v_{11}v_{21}, v_{21}v_{22} \} \\
+f(P_4) &= 1000 + (103 + 9) = 1112
+\end{align*}
+
+\item Mutation doesn't occur
+
+\item Elitism model keeps $P_2, P_3$. The population is now $P = \{ P_2, P_3 \}$.
+\end{itemize}
+
+\textbf{Second Iteration}:
+\begin{itemize}
+\item Apply single point crossover at random index 0 between $P_2, P_3$. The new population is $P = \{ P_2, P_3, P_4, P_5 \}$ where
+\begin{align*}
+P_4 &= \{ v_{11}v_{12}, v_{12}v_{22}, v_{22}v_{33} \} \\
+f(P_4) &= 0 + (2 + 6 + 2) = 10 \\
+P_5 &= \{ v_{11}v_{21}, v_{21}v_{22}, v_{22}v_{33} \} \\
+f(P_5) &= 0 + (103 + 9 + 2) = 114
+\end{align*}
+
+\item Uniform mutation occurs which adds $P_6 = \{ v_{11}v_{12}, v_{12}v_{22} \}$ to the population where $f(P_6) = 1008$.
+
+\item Elitism model keeps $P_2, P_4$. The population is now $P = \{ P_2, P_4 \}$.
+\end{itemize}
 
 \subsection{Implementation}
 The implementation for the proposed solution is located in the \verb|aco| directory. The file \verb|acosolver.py| in the root directory is the script used to run the proposed solution. The detailed instructions for usage of the script is in the user guide located in \verb|README| in the root project directory. 
