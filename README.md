@@ -12,6 +12,9 @@ Contains the logic for Genetic Algorithms Optimization
 Contains the logic for generating graphs used to test the algorithms
 ### /report
 Contains the final report
+
+**NOTE**: The list of figures, list of tables, and references do **not** count towards out report length of 6 pages.
+
 ### /result
 Contains the outputted path in a png format
 
