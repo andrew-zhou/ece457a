@@ -275,7 +275,11 @@ Which algorithm best suits this problem:
 
 \section{Conclusions \& Recommendations}
 % TODO: Zuqi
-\blindtext
+For determining the optimal flight path of multiple package delivering drones for the Amazon Prime Air Traffic Control, we implemented a pure GA solver and a combined ACO and GA solver where given a region of height map, a start location, and a set of goal locations, the solvers will attempt to find the most optimal paths.
+
+The pure GA solver solves the problem using the Simple GA algorithm by performing one-point crossover, uniform mutation, and elitism survivor selection on an initial population of paths from the start to the goal for a pre-configured number of generations. The pure GA solver performs the Simple GA algorithm for each drone until each path is generated. The combined ACO and GA solver first uses the Permutation GA algorithm to first determine the order of the drones path that we should calculate.
+
+We solved multi drone. results showed that ACO outperformed GA. we can incorporate more cost.
 
 \begin{thebibliography}{00}
 \bibitem{b1} Roberge, Vincent, Mohammed Tarbouchi, and Gilles Labont. ``Comparison of parallel genetic algorithm and particle swarm optimization for real-time UAV path planning.'' IEEE Transactions on Industrial Informatics 9.1 (2013): 132-141
