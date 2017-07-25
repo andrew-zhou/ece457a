@@ -35,3 +35,9 @@ goals: the finishing node for each drone. All the drones start at node 1
 `python aco_ga_waterloo.py`
 
 this will run both the ACO and GA algorithm using the waterloo.ecegraph map with goals set to 226, 228, and 230
+
+## Changing Parameters
+### GA
+The parameters for the GA can be changed in ga/gaconstants.py
+### ACO
+The parameters for the ACO can be changed in aco/acoconstants.py
