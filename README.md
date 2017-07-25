@@ -38,6 +38,6 @@ this will run both the ACO and GA algorithm using the waterloo.ecegraph map with
 
 ## Changing Parameters
 ### GA
-The parameters for the GA can be changed in ga/gaconstants.py
+The parameters for the GA can be changed in `ga/gaconstants.py`
 ### ACO
-The parameters for the ACO can be changed in aco/acoconstants.py
+The parameters for the ACO can be changed in `aco/acoconstants.py`
