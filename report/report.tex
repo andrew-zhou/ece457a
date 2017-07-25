@@ -37,7 +37,7 @@
 
 \begin{abstract}
 % TODO: Zuqi
-This paper describes the problem of three dimensional path planning for multiple agents, reviews previous research on the subject, and details the application of two meta heuristic algorithms, genetic algorithms and ant colony optimization, to this problem. This paper will also compare, evaluate, and provide the performance data for each algorithm and finally, recommend and analyse the proposed solution.
+This paper describes the problem of three dimensional path planning for multiple agents, reviews previous research on the subject, and details the application of two meta heuristic algorithms, genetic algorithms and ant colony optimization, to this problem. This paper will also compare, evaluate, and provide the performance data for each algorithm and finally, recommend and analyze the proposed solution.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -49,7 +49,7 @@ ant colony optimization, genetic algorithms, path planning, network theory (grap
 Drone technology has become more prevalent in recent times. For many people, drones are used to take pictures, and explore surronding environments. However, for Amazon, drones can revolutionize the package delivery business. Automated drone delivery has the potential to out perform ground delivery due to their air mobility, but this requires precise air traffic control to maximize drone efficiency, and prevent drone collision in the air. In short, this is a problem of three dimensional path planning for multiple drones. This paper will attempt to implement a number of solutions to this problem using meta-heuristic algorithms, and compares the effectiveness of each algorithm.
 
 \section{Literature Review}
-Previous research in the field of three dimensional path planning has focused on the single-agent problem and has traditionally looked at genetic algorithm (GA) and particle swarm optimization (PSO) approaches. Studies in this field have motivated the techniques utilised in this paper both through the algorithms for single-drone path finding as well as the reduction of a real three-dimensional space into a graph of waypoints.
+Previous research in the field of three dimensional path planning has focused on the single-agent problem and has traditionally looked at genetic algorithm (GA) and particle swarm optimization (PSO) approaches. Studies in this field have motivated the techniques utilized in this paper both through the algorithms for single-drone path finding as well as the reduction of a real three-dimensional space into a graph of waypoints.
 
 A key optimization conducted in this paper is the reduction of real three-dimensional spaces into adjacency lists of waypoints. Doing this minimizes the search space drastically, enabling the path planning techniques to be more effective on a wider range of potential spaces. This reduction is done by grouping neighbouring points into waypoints and then calculating an average real-world cost to move between neighbouring waypoints. Studies on real-time UAV path planning suggest that the cost for a drone to move between points is determined by distance, altitude, power consumption, fuel usage, ground collisions, and whether or not the drone must traverse through danger zones \cite{b1}. In light of this, the edge cost between waypoints produced by translating a real three-dimensional space incorporates
 all of these factors (distance, altitude, power consumption, fuel usage, penalties for ground collisions, and penalties for traversing through danger zones). Therefore, the overall cost function for determining costs between waypoint edges is:
@@ -74,7 +74,7 @@ Thus, the environment can be represented now as a node graph be $G = (V, E)$ whe
 \subsection{Problem Modeling}
 Assume there are $n$ drones. Assume all drones start at waypoint $v_s$ and wish to arrive at different waypoints such that drone $i$ wishes to arrive at waypoint $v_{gi}$.
 
-The state space is a set of paths for each drone. It can be modeled as a set $S = \{S_1, ..., S_n\}$ such that $S_i$ is a list of $k$ nodes where $S_i : \{1, ..., k\} \rightarrow E$.
+The state space is a set of paths for each drone. It can be modelled as a set $S = \{S_1, ..., S_n\}$ such that $S_i$ is a list of $k$ nodes where $S_i : \{1, ..., k\} \rightarrow E$.
 
 The initial state is a random set of paths such that each drone begins at the start waypoint. Thus if the current state is $S$, then for each $S_i$, $S_i(1) = v_sv_a$ where $v_a \in V$ and $v_a\neq v_s$.
 
@@ -171,7 +171,7 @@ N(v) = \{ u | abs(f(u) - f(v)) \leq (1, 1) \}
 \subsubsection{Genetic Algorithm}
 For GA, the following parameters were used:\\
 \textbf{Population size: } 200 \\
-A large population size greatly increase the runtime of the GA algorithm, while a small population won't generate enough diversity to find a suitable path. A population size of 200 was the sweet spot that generated the most consistent solution under a good runtime.\\
+A large population size greatly increases the runtime of the GA algorithm, while a small population won't generate enough diversity to find a suitable path. A population size of 200 was the sweet spot that generated the most consistent solution under a good runtime.\\
 \textbf{Iteration number: } 100 \\
 Iteration number is similar to population size, as it increases runtime at large iterations, and decrease solution consistency at low iterations, an iteration number of 100 had consistent solution with good runtime \\
 \textbf{Tournament size: } 10 \\
@@ -181,6 +181,17 @@ Elitism rate affects the number of survivors for each generation. A rate of 0.4,
 \textbf{Mutation rate: } 0.4 \\
 Mutation rate allows the algorithm to escape local minima. A mutation rate of 0.4 ensures that the entire search space will likely be searched, therefore improving the final solution of the algorithm.
 \subsubsection{Ant Colony Optimization}
+For ACO, the following parameters were used:\\
+\textbf{Ant colony size: } 8 \\
+A large ant colony size greatly increases the runtime of the ACO algorithm, while a small ant colony size won't generate enough diversity to find a suitable path. An ant colony size of 8 was the sweet spot that generated the most consistent solution under a good runtime.\\
+\textbf{Iteration number: } 100 \\
+Iteration number is similar to ant colony size, as it increases runtime at large iterations, and decrease solution consistency at low iterations, an iteration number of 100 had consistent solution with good runtime \\
+\textbf{Alpha: } 0.5 \\
+The alpha value affects the influence of pheromones on the ant's decision when choosing the next node to take. The greater the alpha value, the more likely an ant will choose a node based on the amount of pheromones already deposited. An alpha value of 0.5 ensured that choosing a path based on pheromones will be picked half of the time, giving emphasis to the cost of the path as well.\\
+\textbf{Beta: } 1.2 \\
+The beta value affects the influence of the path cost on the ant's decision when choosing the next node to take. The greater the beta value, the more likely an ant will choose a node based on its distance cost. A beta value of 1.2 ensured choosing a lower cost path. \\
+\textbf{Evaporation rate: } 0.4 \\
+Evaporation rate is how fast pheromones are evaporated from the edges of the graph. An evaporation rate of 0.4 ensures that the ants won't be bounded by old paths for a long period of time, which leads to new paths being discovered.
 
 \subsection{Algorithm Demonstration}
 \subsubsection{Genetic Algorithm}
