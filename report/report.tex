@@ -282,9 +282,9 @@ Results for two drones. Similar to the results for one drone, tuning the paramet
 
 Based on the results between ACO and GA, it is clear that ACO has the better runtime performance. This shows that one of the advantages of ACO is that it uses parallelism which greatly improves the runtime of the algorithm. Speed is a big factor in drone delivery and so, a low runtime by ACO is preferred. In addition, by the graphs of the experiments, the paths produced by ACO seemed to be more optimal than the paths produced by GA. Unlike GA, ACO retains memory of the entire colony instead of just previous generation. This allows ACO to choose a better overall path. The disadvantage of ACO is that it uses a lot of parameters, and so the selection of values are mostly experimental. The alpha, beta, ant colony size and evaporation parameters were all determined through many rounds of trial and error until a decent path cost and runtime were observed. Furthermore, the number of iterations that was used in the experiments may not have achieved the best path. Increasing the number of iterations may take too long for a best solution to converge.
 
-%TODO David talk about GA advantages/disadvantages
+GA on the other hand is relatively easier to implement compared to ACO. Its concepts are easier to grasp. In addition, mutation allows GA to search across the entire search space of the problem, however the randomness may prevent it from finding the best solution in the search space. At low iterations, its randomness makes the solution very inconsistant compared to ACO, but at higher iterations, the solution becomes much more consistent, at the cost of performance time.
 
-In addition, the usage of an A* algorithm for finding individual drone paths with GA running above it for determining an optimal ordering of the drones was conducted as a baseline. The heuristic function for each waypoint in the A* algorithm was based off the aforementioned cost function for mapping three-dimensional space into waypoints with the (x, y, z) positions being used to approximate distance to the goal. This baseline approach was found to perform worse than the above metaheuristic approaches with the following results:
+The usage of an A* algorithm for finding individual drone paths with GA running above it for determining an optimal ordering of the drones was conducted as a baseline. The heuristic function for each waypoint in the A* algorithm was based off the aforementioned cost function for mapping three-dimensional space into waypoints with the (x, y, z) positions being used to approximate distance to the goal. This baseline approach was found to perform worse than the above metaheuristic approaches with the following results:
 
 With one drone:
 \begin{center}
@@ -310,7 +310,7 @@ path cost & runtime(s) \\
 
 Tests were also conducted with various other combinations of parameters for ACO which resulted in worse performance or worse results. The results for these tests are as follows:
 \begin{center}
-\begin{tabular}{ | m{1cm} | m{1cm}| m{1cm} | m{1.5cm} | m{1.5cm} |} 
+\begin{tabular}{ | m{1cm} | m{1cm}| m{1cm} | m{1.5cm} | m{1.5cm} | m{1.5cm}} 
 \hline
 number of drones & number of ants & $\alpha$ & $\beta$ & path cost & runtime(s) \\ 
 \hline
